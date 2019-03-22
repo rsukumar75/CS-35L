@@ -1,0 +1,72 @@
+Name: Rishab Sukumar
+UID: 304902259
+TA: Zhiyi Zhang
+File: lab.txt
+
+I first ran the command sort --version.
+My version of sort was 8.30 which is the most recent version.
+
+I then created a file called largefile.txt with 2^24 single precision
+floating point numbers using the od command. I formatted the text such that
+every number was on a new line with no spaces.
+
+Command: od -tf4 -N 67108864 < /dev/urandom | sed 's/^[0-7]* *//g' |
+tr -s ' ' '\n' > largefile.txt
+
+The option -tf4 defines the type of our output. It was of the type floating
+point. The number 4 denotes that each floating point number of single precision
+is 4 bytes large.
+
+The number 67108864 is simply 2^24 * 4. This is because we need 2^24 single
+precision floating point numbers. Each number is 4 bytes large.
+
+The sed command filters out all the octal numbers.
+
+The tr command transforms all spaces to newline characters.
+
+I then ran the time -p command on sort -g when run on the large file that
+I just generated. I piped the output to /dev/null.
+Command: time -p sort -g < largefile.txt > /dev/null
+
+real 61.56
+user 339.14
+sys 1.58
+
+I then moved onto timing the sorting while using the --parallel=N option where
+N defines the number of threads being used concurrently to implement the
+sorting.
+
+I then time the sorting when running 1 thread.
+
+real 227.74
+user 227.30
+sys 0.39
+
+I then repeated the above step for sorting when running 2 parallel threads.
+
+real 143.91
+user 252.53
+sys 0.61
+
+I then repeated the above step for sorting when running 4 parallel threads.
+
+real 85.59
+user 275.93
+sys 0.72
+
+I then repeated the above step for sorting when running 8 parallel threads.
+
+real 59.37
+user 327.41
+sys 0.94
+
+It is clear from the steps above that the real time differs greatly in each
+example. The sorting takes the most amount of time when running 1 thread and
+the least amount of time when running 8 threads.
+The system time increases slightly as we increase the number of threads.
+The user time increases by larger differences than the system time as number
+of threads increase.
+
+The real time when running the default sort is close to the sort time when
+using 8 threads. Thus, the default sort could probably also be multithreaded
+using 8 threads.

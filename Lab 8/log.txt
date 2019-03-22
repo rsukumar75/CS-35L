@@ -1,0 +1,144 @@
+Name: Rishab Sukumar
+UID: 304902259
+TA: Zhiyi Zhang
+File: log.txt
+
+Beaglebone Setup:
+
+I connected the BeagleBone to my laptop and opened the file START.htm within the Beaglebone. 
+This took me to a page that guided me through the setup of the Beaglebone.
+I then installed the drivers located on the page that opened. However, the installed drivers weren't working as needed.
+Thus, I installed the driver located at the following link posted on piazza.
+http://disq.us/url?url=http%3A%2F%2Fnyus.joshuawise.com%2FHoRNDIS-rel8pre2-dbg.pkg%3AnWVXptevoA9QSEAQQXuPQfiJ240&cuid=1845838
+
+SERVER SETUP:
+
+After installing the drivers I connected to my Beaglebone's wifi nextwork. A new webpage popped up asking me to specify what my Beaglebone would be connected to. I connected to a private hotspot for
+this purpose.
+
+I then opened my terminal and ssh'd into my beaglebone by entering the following command.
+ssh root@192.168.43.109
+
+I then entered the command ssh-keygen to generate public and private keys.
+
+I used the default file location and left an empty password.
+
+Output: Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+1a:f9:60:16:7a:f0:3e:62:8e:61:54:fb:d8:d8:24:9c root@beaglebone
+The key's randomart image is:
++---[RSA 2048]----+
+|                 |
+|                 |
+|    o .          |
+|   o * o         |
+|  . E X S        |
+| .   & =         |
+|  o = B .        |
+| . = . .         |
+|  . .            |
++-----------------+
+
+I then created an account for my partner on the server using the following commands and after entering data in the relevant fields.
+
+sudo useradd -d /home/DevyanB -m Devyan
+
+I created a password for my partner after entering the following command and entering data in the relevant fields.
+
+sudo passwd Devyan
+
+I then created a .ssh directory for my partner by entering the following commands.
+
+cd /home/DevyanB
+sudo mkdir .ssh
+
+I then changed ownership and permissions for the .ssh directory by entering the following commands.
+
+sudo chown -R Devyan .ssh
+sudo chmod 700 .ssh
+
+CLIENT SETUP:
+
+I then started the client setup on my local machine. I 
+disconnected from my Beaglebone and began setting up the
+client.
+
+I generated public and private keys by entering the following commands.
+
+ssh-keygen
+
+Output: The key fingerprint is:
+SHA256:w32qoL4iBqUTm4Bewjz5ojmy8JZHQf4Avo5d3Etotfg rishabsukumar@Rishabs-MacBook-Pro.local
+The key's randomart image is:
++---[RSA 2048]----+
+|                 |
+|  . .            |
+|+..+             |
+|+*o.+ .. .       |
+|o*=o O .S . .    |
+|*o..B =  . o     |
+|+*.= o..  .      |
+|Oo* ..E. .       |
+|+=.++.  .        |
++----[SHA256]-----+
+
+I then copied my public key to the server for key-based authentication using the following command.
+
+ssh-copy-id -i Rishab@192.168.43.217
+
+Output: /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/Users/rishabsukumar/.ssh/id_rsa.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+Debian GNU/Linux 8
+
+BeagleBoard.org Debian Image 2016-10-20
+
+Support/FAQ: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+
+default username:password is [debian:temppwd]
+
+Rishab@192.168.43.217's password:
+
+Number of key(s) added:        1
+
+Now try logging into the machine, with:   "ssh 'Rishab@192.168.43.217'"
+and check to make sure that only the key(s) you wanted were added.
+
+I then added a private key to the authentication agent 
+(ssh-agent) using the following command.
+
+ssh-add
+
+Output: Identity added: /Users/rishabsukumar/.ssh/id_rsa (/Users/rishabsukumar/.ssh/id_rsa)
+
+I then ssh'd into the server using the following command.
+
+ssh Rishab@192.168.43.217
+
+I didn't have to enter a password since we disabled password authentication.
+
+I then used port forwarding with the -X option to enable X11 session forwarding.
+
+I did this by running the ssh command with the -X option as
+seen below.
+
+ssh -X Rishab@192.168.43.217
+
+I then tried running the commands xterm, gedit, and firefox.
+Xterm opened a shell terminal on my device.
+Gedit opened a text editor.
+Firefox opened a firefox browser window on my device.
+
+I then exited and tried running the ssh command with
+the -Y option as seen below.
+
+ssh -Y Rishab@192.168.43.217
+
+I ran the commands xterm, gedit, and firefox and received similar results.
+
+I then tried running the commands xterm, gedit, and firefox.
+
+There were no discernible differences between the two commands. However, the -X option tells the client to treat the remote machine as an untrusted client.
+
+The -Y option tells the client to treat the remote machine as a trusted client.

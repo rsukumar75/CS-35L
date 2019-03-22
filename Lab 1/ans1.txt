@@ -1,0 +1,68 @@
+Name: Rishab Sukumar
+Student ID: 304902259
+TA: Zhiyi Zhang
+Professor: Paul Eggert
+CS 35L Lab Assignment #1
+File: ans1.txt
+Using lnxsrv06
+
+Lab Questions:
+
+1. man -k keyword or man --apropos keyword. This was found by typing the man man command and looking through the command descriptions.
+
+2. The paths to the two commands are /usr/bin/mv and /usr/bin/sh
+Commands used: 
+whereis mv
+whereis sh
+
+3. tr- translate or delete characters, pr- convert text files for printing, ar- create, modify, and extract from archives
+Commands used: 
+cd ../../../.. (to navigate to the root directory)
+find . -maxdepth 3 -name ?r (the '?' character is a wildcard that refers to any one character)
+man pr
+man tr
+man ar
+
+4. /etc/alternatives/emacs
+Commands used:
+cd /usr/bin/gcc
+ls -l | grep "\->" (This searches for all symbolic links in the output of the ls -l command)
+
+5. With usr/bin/ the version of gcc is 4.8.5.
+   The plain gcc program version is 8.2.0.
+   The standard gcc compiler is installed by your linux distribution in the /usr/bin directory.
+   Another version of gcc has been installed in the /usr/local/cs/bin directory. Thus, they are different programs.
+   Commands used: 
+   cd /usr/bin/gcc
+   ./gcc --version (this gives the version number of gcc in the present working directory)
+   cd ../../.. (to navigate to root)
+   cd usr/local/cs/bin 
+   ./gcc --version (this gives the version number of the plain gcc program)
+
+6. The symbolic mode u+sx in chmod adds certain permissions to the user of the file specified. The character 's' denotes that a user or group ID will be set on execution. The character 'x' denotes that execute (or search for directories) permission is added for the user. These permissions are added to the user of the file.
+
+   The symbolic mode o-w in chmod removes certain permissions from other users not in the file's group. The character 'w' denotes that write permission is removed from other users not in the file group. 
+
+   This information was obtained by running man chmod.
+
+7. The command used to find all the directories within and including /usr/local/cs that were modified less than 4 weeks ago was, find . -type d -mtime -27
+There are 2345 directories in total.
+I discovered the -mtime option using man find.
+
+8. There are 279 symbolic links in the same directory as find. We find the directory of find to be /usr/bin using the whereis find command. We then use the command ls -l | grep ^l | wc -l to find the number of lines in the same directory as find containing symbolic links.
+
+9. The oldest regular file in the directory /usr/lib64/ is librom1394.so.0.3.0
+It is found using the ls -lta | grep ^- command which sorts the regular files in the directory by modification time. This was discovered using man ls and searching for time options.
+
+10. Using man locale we see that the data is based on the setting of the environment variables that control the locale. This is defined in Chapter 7 of Locale.
+
+11.The commands downcase-region and downcase-word have 'downcase' in their names. The command used to determine this was C-h a downcase which is the apropos command.
+
+12. C-M-v runs the command scroll-other-window, which is an interactive built-in function in 'C-source-code'. C-M-r runs the command isearch-backward-regexp which is an interactive compiled lisp function. The commands used to determine this were C-h c C-M-v and C-h c C-M-v.
+
+13. C-g runs the command keyboard-quit, which is an interactive compiles Lisp function. It signal a 'quit' condition. During execution of Lisp code, this character causes a quit directly. At top-level, as an editor command, this simply beeps. While entering any minibuffer input, you can canel the command using C-g. It can also be used to terminate a search. It cannot, however, be used to get out of a recursive editing level. This is because it is used for cancelling commands and arguments within the recursive editing level. The commands used to determine this were C-h k C-g. I also used C-s within the emacs tutorial to gather more information.
+
+14. The yank command reinserts or pastes the last stretch of killed text. More precisely, it reinserts the most recent kill. You can easily invoke it by typing C-y. The command used to determine this was C-h k C-y.
+
+15. The dired command also gives the current and parent directories whereas the ls -l command only gives files and directories within the current directory. This was determined by running the command ls -l when in the /usr/bin directory, running the command C-x d /usr/bin on emacs and comparing the results.
+

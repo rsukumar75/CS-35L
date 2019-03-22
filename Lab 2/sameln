@@ -1,0 +1,48 @@
+#! /bin/bash
+
+D=$1 
+RESULT=`ls -a $D | sort -u`
+IFS=$'\n'
+declare -a dotfiles
+declare -a regfiles
+let numregfiles=0
+let numdotfiles=0
+for file in $RESULT
+do
+    if [ ! -r "$D/$file" ]
+    then
+	echo "You do not have read permission for $D/$file"
+    fi
+    if [ ! -L "$D/$file" -a ! -d "$D/$file" ]
+    then
+	if [ -f "$D/$file" ]
+	then
+	    if [ "${file:0:1}"=="." ] 
+	    then
+		    dotfiles[$numdotfiles]="$D/$file"
+		    let numdotfiles=$numdotfiles+1
+	    else
+		    regfiles[$numregfiles]="$D/$file"
+                    let numregfiles=$numregfiles+1
+            fi
+	fi
+    fi
+done
+CombinedArray=("${dotfiles[@]}" "${regfiles[@]}") #array where each element is an array
+
+#to add integers $(($i + 5))
+let length=${#CombinedArray[@]}
+for ((i=0; i<$length; i++))
+do
+    for ((j=$i+1;j<$length;j++))
+    do
+	cmp -s "${CombinedArray[$i]}" "${CombinedArray[$j]}"
+	if [ $? -eq 0 ]
+	then
+	    ln -f "${CombinedArray[$i]}" "${CombinedArray[$j]}"
+	    CombinedArray[$j]=CombinedArray[$i] 
+	fi
+    done
+done
+
+IFS=$restore

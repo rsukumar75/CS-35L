@@ -1,0 +1,109 @@
+
+Name: Rishab Sukumar
+Student ID: 304902259
+TA: Zhiyi Zhang
+Professor: Paul Eggert
+CS 35L Lab Assignment #1
+File: key1.txt
+Using lnxsrv06
+
+Exercise 1.1: Moving around in Emacs
+
+1. e m a c s e x e r 1 . h t m l
+2. C-s H T M L <Enter>
+3. C-s s c a v e n g e r <Enter> M-b
+4. C-s s e l f - r e f e r e n t i a l <Enter> M-b M-b
+5. C-s a r r o w <Enter> M-b
+6. C-e
+7. C-a
+8. I did the above steps using emacs commands.
+9. No, I did not move the cursor using the arrow keys.
+10. C-x C-c
+
+Exercise 1.2: Deleting text in Emacs
+
+1. e m a c s e x e r 2 . h t m l
+2. M-g g 1 8 <Enter> C-k
+3. C-s D E L E T E - M E  D E L E T E - M E  D E L E T E - M E  <Enter> C-a C-k
+4. C-s <! <Enter> C-a C-u 3 C-k
+5. C-s <! <Enter> M-b M-f C-SPC C-u 7 C-f C-w
+   C-s <! <Enter> C-a C-u 4 C-k
+   C-s <! <Enter> C-a C-k
+
+To save file: C-x C-s
+Exit: C-x C-c
+
+Exercise 1.3: Inserting text in Emacs
+
+1. e m a c s e x e r 3 . h t m l
+2. M-% A s s i g n m e n t 1 <Enter> A s s i g n m e n t 2 <Enter> y y <Enter>
+3. M-< M-% U T F - 8 <Enter> U S - A S C I I <Enter> y <Enter>
+4. M-< C-M-s [ ^ [ : a s c i i : ] ] C-a C-k
+5. M-< C-s < / o l > <Enter> <Enter>
+
+Save and exit: C-x C-s C-x C-c
+
+Exercise 1.4: Other editing tasks in Emacs
+
+1. c a t  e x e r 2 . h t m l  e x e r 2 . d i f f > e x e r 4 . h t m l
+2. e m a c s  e x e r 4 . h t m l
+3. M-> C-r -< C-f C-SPC C-e M-w M-g M-g 3 9 9 <Enter> C-y
+   M-g M-g 4 4 2 <Enter> C-f C-SPC C-e M-w M-g M-g 3 8 5 <Enter> C-y M-g M-g 4 4 3 <Enter> C-f C-SPC C-e M-w M-g M-g 3 8 6 <Enter> C-y M-g M-g 4 4 4 <Enter> C-f C-SPC C-e M-w M-g M-g <Enter> 3 8 7 C-y M-g M-g 4 4 5 <Enter> C-SPC C-e M-w M-g M-g 3 8 8 <Enter> C-y
+   M-g M-g 4 4 1 <Enter> C-u 4 M-f C-SPC C-u 7 C-f M-w M-g M-g 3 8 4 <Enter> C-u 4 M-f C-y
+   M-g M-g 4 2 7 <Enter> C-f C-SPC C-e M-w M-g M-g 3 4 0 <Enter> C-y M-g M-g 4 2 8 <Enter> C-f C-SPC C-e M-w M-g M-g 3 4 1 <Enter> C-y M-g M-g 4 2 9 <Enter> C-f C-SPC C-e M-w M-g M-g 3 4 2 <Enter> C-y 
+   M-g M-g 4 2 1 <Enter> C-f C-SPC C-e M-w M-g M-g 1 2 7 <Enter> C-y 
+   M-g M-g 4 1 2 <Enter> C-f C-SPC C-e M-w M-g M-g 1 8 <Enter> C-y
+5. M-g M-g 4 0 6 <Enter> C-SPC M-> C-w
+6. C-x u
+7. M-g M-g 4 0 6 <Enter> <!-- M-% -> <Enter> - <Enter> y y y y y y M-> C-p <!-- C-f -->
+8. M-< M-s o <Enter>
+   Found 7 matches
+   C-x 1 M-% < o l > <Enter> < o L > <Enter> !
+9. d i f f  - u  e x e r 1 . h t m l  e x e r 4 . h t m l  > e x e r 4 . d i f f
+
+Exercise 1.5: Doing commands in Emacs
+
+1. M-x m a k e - d i r e c t o r y <Enter> j u n k 
+2. C-x C-f j u n k / h e l l o . c <Enter>
+4. M-x c o m p i l e  g c c  h e l l o . c  - o  h e l l o <Enter>
+5. M-! . / h e l l o  >  h e l l o - o u t  <Enter> C-SPC M-> M-x a p p e n d - t o - f i l e <Enter> k e y 1 . t x t
+#include <stdio.h>
+int
+main (void)
+{
+ char n = '\n', b = '\\', q = '"';
+ char const *p = "#include <stdio.h>%cint%cmain (void)%c{%c char n = '%cn', b = '%c%c', q = '%c';%c char con\
+st *p = %c%s%c;%c  printf (p, n, n, n, n, b, b, b, q, n, q, p, q, n, n, n, n);%c  return 0;%c}%c";
+  printf (p, n, n, n, n, b, b, b, q, n, q, p, q, n, n, n, n);
+  return 0;
+}
+
+Exercise 1.6: Running Elisp Code
+
+1. C-x b * s c r a t c h * <Enter>
+2. ( r a n d o m  " 3 0 4 - 9 0 2 - 2 5 9 " ) C-j
+   -1932455615516974567
+3. ( s e t q  x  ( r a n d o m ) ) C-j
+   388090598570431847
+   ( s e t q  y  ( r a n d o m ) ) C-j
+   -1351584506542586448
+4. ( *  x  y ) C-j
+   -1567007324850996784
+   We obtain this incorrect product as a result of overflow when the product of x and y is calculated.
+5. M-: ( *  x  y )
+   1567007324850996784 (#o251006762176164434720, #x2a40df23f1d239d0)
+   The result is the same but also includes the octal and hexadecimal representation of it.
+6. The two random integers are not truly random in a mathematical sense as languages like Elisp are restricted to a finite number of integers as per memory constraints. We also provide the random generator a seed string. Thus, it can be assumed that there is a pattern to the random number generation. There is probably some code that does the random number generation and follows a pattern.
+7. The range for integers is from -2^63 to 2^63 - 1. Thus all the integers x and y that give a product xy outside of this range will cause an overflow. We require all values |xy| <= 2^63 as well as all values |(-x)(y)| >= -2^63. The total number of possible products given this domain is (2^(63))^2 * 2 and the total number of products that do not cause overflow or underflow are 2(ln|2^63| + 2^63). Thus, the probability of the product being accurate is (ln|2^63|+2^63)/(2^63)^2.
+However, we require the probability of the product of two random integers x and y resulting in an incorrect value. That probability is simply 1 - ((ln|2^63|+2^63)/(2^63)^2). This results in an extremely high probability that is almost equal to 1. Thus, we get an inaccurate product on most occasions.
+A general case for this would substitute some value n for 2^63. Suppose have no constraints on the range of integers. We would still have a high probability of close to 1 in this case.
+
+
+
+
+
+
+
+
+
+

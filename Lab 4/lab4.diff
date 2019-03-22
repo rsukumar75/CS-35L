@@ -1,0 +1,31 @@
+Changelog:
+Changed the timespec_cmp function to do comparisons instead of subtractions
+If first time value is less than second time value, diff is negative.
+Otherwise if first time value is greater than second time value, diff is positive
+Otherwise diff is 0.
+Fixes the buggy functionality of ls command by preventing overflow that occurs due to subtraction of large negative number from large positive number.
+--- originaltimespec.h	2018-11-03 01:32:46.478515000 -0700
++++ timespec.h	2018-11-03 01:34:26.834922000 -0700
+@@ -45,8 +45,20 @@
+ static inline int
+ timespec_cmp (struct timespec a, struct timespec b)
+ {
+-  int diff = a.tv_sec - b.tv_sec;
+-  return diff ? diff: a.tv_nsec - b.tv_nsec;
++  int diff = 0;
++  if(a.tv_sec < b.tv_sec)
++    {
++      diff = -1;
++    }
++  else if(a.tv_sec > b.tv_sec)
++    {
++      diff = 1;
++    }
++  else
++    {
++      diff = 0;
++    }
++  return diff;
+ }
+ 
+ # if ! HAVE_DECL_NANOSLEEP

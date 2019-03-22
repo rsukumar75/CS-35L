@@ -1,0 +1,185 @@
+Name: Rishab Sukumar
+Student ID: 304902259
+TA: Zhiyi Zhang
+CS 35L Lab 1
+File: lab2.log
+
+First I SSH into seasnet linux server 07.
+
+The first command entered was locale
+I observe that the locale was "en_US.UTF-8".
+We want the locale to be 'C'.
+
+To change the locale to 'C' I entered export LC_ALL='C'
+
+I then entered locale to check if it had changed.
+I observed that the locale had changed to 'C'.
+
+I then entered cd /usr/share/dict.
+This moved me to the /usr/share/dict directory where the words file is located.
+
+I then entered the ls command.
+This was to confirm that the words file was present in the directory. 
+It was present in the directory.
+
+I then entered sort words > ~/words to sort the lines in the words file.
+All the lines are put into the words file in the home directory.
+
+I then entered cd ~ to move to the home directory.
+In my case the home directory is /u/cs/ugrad/rishab.
+
+I entered wget https://web.cs.ucla.edu/classes/fall18/cs35L/assign/assign2.html
+to copy the html code for the assignment's webpage to a file assign2.html.
+
+I entered cat assign2.html | tr -c 'A-Za-z' '[\n*]'
+to obtain a list of words from assignment webpage's html file.
+
+Next I entered cat assign2.html | tr -cs 'A-Za-z' '[\n*]'
+I obtained the same list as when I entered the previous command. 
+There were no spaces between the lines. All the lines were squeezed together.
+
+I entered cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort 
+and obtained the same list as when I entered the previous commands. 
+However, the lines were sorted in ASCII order. 
+The lines were also still squeezed together. 
+There are no spaces between them.
+
+Next I entered cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort -u
+I obtained a sorted list where the lines were squeezed together. 
+However, repeated words were only printed once. 
+
+I entered cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort -u | comm - words
+and obtained a sorted list of words where the lines were squeezed together. 
+There were words from both the assignment html file and the words file. 
+The two lists were compared and the lists were printed in different columns. 
+Words in column 1 were unique to the html file words list. 
+Words in column 2 were unique to the words file. 
+There were no words in column 3.
+Column 3 would normally have had words that were common to both lists.
+
+Command: cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - words
+Obtained a sorted list of words where the lines were squeezed together. 
+I only obtained words that were unique to the list from the html file. 
+Words in column 1 were unique to the html file words list.
+Words in column 2 were unique to the words file.
+There were no words in column 3.
+Column 3 would normally have had words that were common to both lists.
+
+Command: cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - words
+Obtained a sorted list of words where the lines are squeezed together.
+We only obtain words that are unique to the list from the html file.
+Columns 2 and 3 are suppressed.
+
+fter I ran the commands I began working on the lab section.
+The first step was to make a copy of the english to hawaiian words dictionary
+in my directory. 
+I used the command wget http://mauimapp.com/moolelo/hwnwdseng.htm
+
+I then created a new shell script called buildwords by entering 
+emacs buildwords.
+
+I declared that the script file is written in bash by entering 
+#! /bin/bash
+
+The first step I took was to obtain all the text between the <td> </td>
+tags.
+I used the command grep -E '<td>.+</td>'
+
+I then tried taking every alternate line in the file. This gave me all
+the Hawaiian words.
+Command: sed '1~2d'
+
+The next step was to remove all the html tags
+so as to only be left with the words in the English to Hawaiian table.
+I entered the command sed 's/<[^>]*>//g' 
+sed searches and replaces text with matching patterns. I used regex to modify
+our searches.
+
+The next step was to transform all uppercase characters to lowercase.
+I did this using the command tr [:upper:] [:lower:]
+
+Following this I transformed all '`' characters to single quotes as per the
+assignment specifications.
+I used the command tr [\`] [\'].
+
+The next step was to remove the extra spaces at the start of every line.
+I used the sed command with regex to achieve this.
+Command: sed 's/^\s*//g'
+
+I then realized that I needed to treat words separated by spaces or commas
+as separate words (i.e. on different lines)
+I replaced all spaces and commas followed by spaces with newline characters.
+Command: sed -E 's/,\s|\s/\n/g'
+
+I then removed all the characters that don't belong to the Hawaiian typeset.
+Command: sed "s/[^pk\'mnwlhaeiou]//g"
+
+I then added a statement to get rid of empty blank lines.
+Command: sed '.^$/d'
+
+The final step is to sort the dictionary and keep only unique words.
+Command: sort -u
+
+I then ran buildwords with the English to Hawaiian words table as its input.
+I redirected the output to hwords.
+hwords has 207 Hawaiian words.
+
+I then changed the spellchecker command so as to run the Hawaiian spellchecker
+on the assignment webpage.
+Command: cat assign2.html | tr [:upper:] [:lower:] |
+tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -23 - hwords | wc -l
+197 words are misspelled.
+
+I then changed the spellchecker command so as to run the Hawaiian spellchecker
+on the hwords dictionary itself.
+Command: cat hwords | tr [:upper:] [:lower:] | tr -cs "pk\'mnwlhaeiou" '[\n*]' |
+sort -u | comm -23 - hwords | wc -l
+
+0 words are misspelled.
+
+I then changed the spellchecker command so as to run the English spellchecker
+on the assignment webpage. We don't need to make it all lowercase
+as the English dictionary has uppercase characters as well.
+Command: cat assign2.html | tr -cs "A-Za-z" '[\n*]' | sort -u |
+comm -23 - words | wc -l
+
+81 words are misspelled.
+
+I then copied all the misspelled English words to a text file
+engmisspell.txt.
+Command: cat assign2.html | tr -cs "A-Za-z" '[\n*]' | sort -u |
+comm -23 - words > engmisspell.txt
+
+I copied all the misspelled Hawaiian words to a text file
+hawmisspell.txt.
+Command: cat assign2.html | tr [:upper:] [:lower:] |
+tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -23 - hwords > hawmisspell.txt
+
+I compared the two text files to see how many words are misspelled as English.
+I used the comm command and suppressed the second and third columns.
+Thus, I only got the words unique to the list of words misspelled as English.
+Command: comm -23 engmisspell.txt hawmisspell.txt | wc -l
+I got 75 words only misspelled as English.
+
+Examples: 
+All
+cmp
+eggert
+halau
+Automate
+
+
+I compared the two text files to see how many words are misspelled as Hawaiian.
+I used the comm command and suppressed the first and third columns.
+Thus, I only got the words unique to the list of words misspelled as Hawaiian.
+Command: comm -13 engmisspell.txt hawmisspell.txt | wc -l
+I got 191 words only misspelled as Hawaiian.
+
+Examples:
+namin
+mail
+ollowin
+pellin
+
+
+

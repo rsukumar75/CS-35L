@@ -1,0 +1,105 @@
+Name: Rishab Sukumar
+UID: 304902259
+TA: Zhiyi ZHang
+File: hw.txt
+
+1. I created this file using emacs.
+
+2. I checked out version 3.0 of diffutils into a new branch named "quote".
+
+Command: git checkout v3.0 -b quote
+
+3. I applied my patch to this new branch by running the patch command.
+
+Command: patch -p1 < ../quote-3.0-patch.txt
+
+4. I learned how to use the Emacs function add-change-log-entry-other-window
+(C-x 4 a)
+
+5. I used the above Emacs function to create a ChangeLog for the changes I made
+to the 6 .c files.
+
+Command: emacs
+	 C-x 4 a
+
+I entered the following description in the ChangeLog.
+  	* src/cmp.c:    Replaced all backticks (`) with apostrophes (')
+        * src/diff.c:   Replaced all backticks (`) with apostrophes (')
+        * src/diff3.c:  Replaced all backticks (`) with apostrophes (')
+        * src/dir.c:    Replaced all backticks (`) with apostrophes (')
+        * src/sdiff.c:  Replaced all backticks (`) with apostrophes (')
+        * src/util.c:   Replaced all backticks (`) with apostrophes (')
+
+6. I then moved to the diffutils directory, staged the changed and committed them.
+
+Command: cd diffutils
+	 git add .
+	 git commit -F ../ChangeLog
+
+7. I then used the git log command to find the commit ID for the last commit.
+
+Command: git log
+
+I then used the command "git format-patch" to generate a file formatted-patch.txt.
+
+Command: git format-patch -1 28dde97b2b13e6ac319b03a38c86df5533d2d6ee --stdout > ../formatted-patch.txt
+
+8. I verified that my patch worked with a partner.
+
+Command: cd ..
+	 scp formatted-patch.txt devyan@lnxsrv07.seas.ucla.edu:~/Desktop
+
+My partner also sent me his patch. I renamed it dev-formatted-patch.txt.
+I checked out version 3.0 to a new branch partner.
+
+Command: git checkout v3.0 -b partner
+
+I then ran the command git am to apply the patch in this new branch.
+
+Command: git am < dev-formatted-patch.txt
+
+I then had to remake diffutils.
+
+Commands: ./bootstrap
+	  patch -p0 < ../diffutils-gets.diff
+	  ./configure
+	  make
+	  make check
+
+I then verified that my partner's patch worked by running the following commands.
+
+src/diff . -
+src/diff --help
+
+Both these commands gave outputs where all backticks were replaced with apostrophes. Thus, the patch worked.
+
+9. I then had to verify that the ChangeLog entry works by running the command
+make distdir.
+
+Command: make distdir
+
+This created a new directory called diffutils-3.0.1-cfc7. This directory contained my partner's ChangeLog.
+
+10. I then cd'd into ~eggert/src/gnu/emacs. I ran the command gitk and received
+the following error.
+Application initialization failed: no display name and no $DISPLAY environment
+variable
+Error in startup script: no display name and no $DISPLAY environment variable
+    while executing
+"load /usr/lib64/tk8.5/../libtk8.5.so Tk"
+    ("package ifneeded Tk 8.5.7" script)
+    invoked from within
+"package require Tk"
+    (file "/usr/local/cs/bin/gitk" line 10)
+
+I resolved this issue by logging out of the seasnet server and ssh'ing' back in
+with port forwarding.
+
+Command: ssh -X rishab@lnxsrv07.seas.ucla.edu
+
+I then moved the the ~eggert/src/gnu/emacs directory and ran the command gitk.
+
+This opened up a gitk window on my local device.
+
+I identified that the newest merge that is not newer than 2015-01-25 was,
+Merge branch 'master' into xwidget 2015-01-25 12:19:27

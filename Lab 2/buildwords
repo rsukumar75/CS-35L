@@ -1,0 +1,15 @@
+#! /bin/bash
+
+grep -E '<td>.+</td>' |
+sed '1~2d' | 
+sed 's/<[^>]*>//g' |
+tr [:upper:] [:lower:] |
+tr [\`] [\'] | 
+sed 's/^\s*//g' |
+sed -E 's/,\s|\s/\n/g' |
+sed "s/[^pk\'mnwlhaeiou]//g" |
+sed '/^$/d' |
+sort -u 
+
+#sed '1~2d' removes odd lines
+# \s is whitespace

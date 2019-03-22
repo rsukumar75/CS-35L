@@ -1,0 +1,21 @@
+Name: Rishab Sukumar
+UID: 304902259
+TA: Zhiyi Zhang
+File: hw.txt
+
+1. If another team really had been observing all the bytes going across the network our resulting network would still be secure.
+We are only passing the public key over the network and the private key is never shared.
+Thus, there would be no way for the other team to access the private key and decrypt the bytes being sent.
+
+If the other teams had tapped my keyboard and obtained my team's keystrokes they would have access to my private key's password.
+This is because I had to enter the authentication private key password after key generation. This could be used to decrypt the data.
+If this was not the first time logging in and I disabled password authentication after key pair generation (on my machine), the other teams would not have access to the private key password.
+
+If I booted off a USB and the other teams got access to it, then they would have our private key as they would have access to our .ssh folders containing our keys. 
+Unless access was somehow restricted to these folders, the other teams would be able to decrypt data using our keys at any time.
+
+2. The gpg --verify command doesn't verify that the .sig file was created by me because the command only verifies the integrity of the signature and that the public key and signature match each 
+other. If the data was intercepted by someone before it reaches the receiver, and modified and signed with a different public key, then the verification would work.
+However, it would be false data as what was originally sent would have been modified.
+
+One way to work around this would be to have a trusted third party to verify who created what files. This verification can be trusted.  

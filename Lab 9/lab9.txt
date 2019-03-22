@@ -1,0 +1,244 @@
+Name: Rishab Sukumar
+UID: 304902259
+TA: Zhiyi Zhang
+File: lab9.txt
+
+1. Get a copy of the Diffutils repository
+
+Command: git clone ~eggert/src/gnu/diffutils
+This cloned a directory diffutils to the current directory.
+
+2. Get a log of changes to Diffutil's master branch
+
+Command: cd diffutils
+	 git log > ../git-log.txt
+
+This copied the log of changes to diffutils to git-log.txt
+
+3. Generate a list of tags used for diffutils
+
+Command: git tag > ../git-tags.txt
+
+This generated a list of tags in git-tags.txt
+
+4. Generate patch for commit
+
+Commands: cd ..
+	  emacs git-log.txt
+	  C-s 'like this'
+
+Once I found the commit, I copied the commit number.
+I then ran the following command to create the patch.
+
+       	   cd diffutils
+	   git format-patch -1 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f --stdout > ../quote-patch.txt
+
+
+5. Checkout version 3.0
+
+Command: git checkout v3.0
+
+This created a detached head state at version 3.0
+
+6. Apply patch to version 3.0
+
+Command: patch -p1 < ../quote-patch.txt
+
+7. Check status
+
+Command: git status
+
+Output:
+HEAD detached at v3.0
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   NEWS
+	modified:   README
+	modified:   TODO
+	modified:   doc/diagmeet.note
+	modified:   ms/config.bat
+	modified:   ms/config.site
+	modified:   po/en.po
+	modified:   src/analyze.c
+	modified:   src/cmp.c
+	modified:   src/context.c
+	modified:   src/diff.c
+	modified:   src/diff.h
+	modified:   src/diff3.c
+	modified:   src/dir.c
+	modified:   src/ifdef.c
+	modified:   src/io.c
+	modified:   src/sdiff.c
+	modified:   src/side.c
+	modified:   src/system.h
+	modified:   src/util.c
+	modified:   tests/help-version
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	NEWS.orig
+	README-hacking.orig
+	README-hacking.rej
+	README.orig
+	README.rej
+	cfg.mk.orig
+	cfg.mk.rej
+	ms/config.site.orig
+	src/cmp.c.orig
+	src/context.c.orig
+	src/diff.c.orig
+	src/diff.c.rej
+	src/diff.h.orig
+	src/diff3.c.orig
+	src/diff3.c.rej
+	src/dir.c.orig
+	src/sdiff.c.orig
+	src/system.h.orig
+	src/util.c.orig
+	tests/help-version.orig
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+8. Use vc-diff and vc-revert
+
+I learned how to use the vc-diff and vc-revert functions in emacs as well as
+the diff-apply-hunk and the undo diff-apply-hunk functions.
+
+9. I visited all the modified files not of the .c format and reverted them to the original.
+Files included: 
+NEWS
+README
+TODO
+doc/diagmeet.note
+ms/config.bat
+ms/config.site
+po/en.po
+src/diff.h
+src/system.h
+tests/help-version
+
+I visited all the .c files and reverted the comments to the original.
+Files included:
+src/analyze.c
+src/cmp.c
+src/context.c
+src/diff.c
+src/diff3.c
+src/dir.c
+src/ifdef.c
+src/io.c
+src/sdiff.c
+src/side.c
+src/util.c
+
+10. The only files of type *.c.rej were src/diff.c.rej and src/diff3.c.rej.
+I used emacs to examine these files and copied rejected patches into the
+corresponding c files as needed.
+
+In diff.c I manually changed ` to ' in 5 lines.
+In diff3.c I manually changed ` to ' in 1 line.
+
+11. Remove all untracked files
+
+Command: git status
+
+Output:
+HEAD detached at v3.0
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   src/cmp.c
+	modified:   src/diff.c
+	modified:   src/diff3.c
+	modified:   src/dir.c
+	modified:   src/sdiff.c
+	modified:   src/util.c
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	NEWS.orig
+	README-hacking.orig
+	README-hacking.rej
+	README.orig
+	README.rej
+	cfg.mk.orig
+	cfg.mk.rej
+	ms/config.site.orig
+	src/#system.h#
+	src/cmp.c.orig
+	src/context.c.orig
+	src/diff.c.orig
+	src/diff.c.rej
+	src/diff.h.orig
+	src/diff3.c.orig
+	src/diff3.c.rej
+	src/dir.c.orig
+	src/sdiff.c.orig
+	src/system.h.orig
+	src/util.c.orig
+	tests/help-version.orig
+
+I then ran the rm command on each of these untracked files to remove them.
+
+12. Create patch
+
+Command: git diff > ../quote-3.0-patch.txt
+	 wc -l ../quote-3.0-patch.txt
+
+Output: 348
+
+Thus, the patch file has 348 lines.
+
+13. Since I was building on lnxsrv07 I first copied to patch into my directory.
+
+Command:
+cd ..
+wget https://web.cs.ucla.edu/classes/fall18/cs35L/assign/diffutils-gets.diff
+
+I read the instructions in README-hacking and built the modified
+version of diffutils using the following commands.
+
+Commands: cd diffutils
+	  ./bootstrap
+	  patch -p0 < ../diffutils-gets.diff
+	  ./configure
+	  make
+	  make check
+
+I did a sanity check with diff . - and diff --help and the output matched
+our requirements.
+
+14. I first cloned the diffutils repository.
+
+Command: cd ..
+	 git clone ~eggert/src/gnu/diffutils diffutils-3.0-orig
+
+I then moved to that directory and checked out version 3.0
+
+Command: cd diffutils-3.0-orig
+	 checkout v3.0
+
+I then made directories diffutils-3.0 and diffutils-3.0-patch
+
+Commands: mkdir diffutils-3.0
+	  mkdir diffutils-3.0-patch
+
+I then copied all the source code files from the modified diffutils to diffutils-3.0-patch
+
+Command: cp diffutils/src/*.c diffutils-3.0-patch/
+
+I then copied all the source code files from the original diffutils to diffutils-3.0
+
+Command: cp diffutils-3.0-orig/src/*.c diffutils-3.0/
+
+I then ran the command:
+diffutils/src/diff -pru diffutils-3.0 diffutils-3.0-patch/ > quote-3.0-test.txt
+
+The two files have several differences, especially changes from ` to '. These
+changes are not only in comments but also in the code. Thus, they are not
+innocuous.

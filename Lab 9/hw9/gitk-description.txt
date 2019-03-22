@@ -1,0 +1,22 @@
+Name: Rishab Sukumar
+UID: 304902259
+TA: Zhiyi Zhang
+File: gitk-description.txt
+
+Description of gitk subwindows.
+
+Upper Half of screen.
+
+Top Left: This subwindow shows the commit history with respect to the branches.
+It provides a graphical representation of commits and merges.
+
+Top Middle: This subwindow shows the information of the specific commit's author.
+
+Top Right: This subwindow shows the timestamp of the corresponding action.
+
+Bottom half of screen.
+
+Bottom Left: This subwindow shows the changelog of the selected commit.
+It also shows actual file changes in unified diff format.
+
+Bottom Right: This subwindow shows comments (Usually the files impacted by the commit)

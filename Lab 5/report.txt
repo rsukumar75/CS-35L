@@ -1,0 +1,256 @@
+Name: Rishab Sukumar
+UID: 304902259
+TA: Zhiyi Zhang
+File: report.txt
+
+I created two files called tr2b.c and tr2u.c to mimic the functionality of
+the tr command. The programs had to take in an input set as well as the set of 
+characters that they map to.
+
+In both the files I first checked to see if the program had been given exactly 
+2 arguments. If this was not the case an error message would be displayed.
+I then checked to see if both the character sets were of the same length. If
+this was not the case an error message would be displayed. I then checked if
+the 'from' set had any duplicate characters. This would mean the same character
+has more than one mapping. Thus, this would cause an error message to be
+displayed as well.
+
+I then began the process of grabbing one character at a time from standard
+input using either getchar or read. If the character was present in the 'from'
+set, the character it maps to would be displayed using the putchar or write
+functions. If the character was not in the 'from' set, the character would
+be displayed as is.
+
+I created a 5MB file called foo filled with random data using the following 
+command:
+dd if=/dev/urandom of=foo bs=5MB count=1
+
+I rewrote the foo file to be called foo.txt
+
+I then ran the strace command on the file for buffered input while copying
+from one file to another. The strace command tracks the system calls that
+take place.
+Command: strace -o strace_output0 ./tr2b abcd trav < foo.txt > bufoutput.txt
+
+I then ran the wc command on strace_output0 to find the number of system
+calls.
+Command: wc -l strace_output0
+I got 31 lines (system calls)
+
+I then ran the strace command on the file for unbuffered input while
+copying from one file to another.
+Command: strace -o strace_output1 ./tr2u abcd trav < foo.txt > unbufoutput.txt 
+
+I then ran the wc command on strace_output1 to find the number of system calls.
+Command: wc -l strace_output1
+I got 10000028 lines (system calls)
+
+Thus, the file that handles unbuffered I/O had significantly more system calls
+when copying from one file to another.
+
+I then ran the strace command on the file for buffered input while copying
+from the large file foo.txt to the terminal.
+Command: strace -o strace_output2 ./tr2b abcd trav < foo.txt
+
+I then ran the wc command on strace_output2 to find the number of system calls.
+Command: wc -l strace_output2
+I got 31 lines (system calls)
+
+I then ran the strace command on the file for buffered input while copying
+from the large file foo.txt to the terminal.
+Command: strace -o strace_output3 ./tr2u abcd trav < foo.txt
+
+I then ran the wc command on strace_output3 to find the number of system calls.
+Command: wc -l strace_output3
+I got 10000028 lines (system calls)
+
+One again, the file that had unbuffered I/O had far more system calls than
+the file for buffered I/O.
+
+I then ran the time command on the program that deals with buffered I/O while
+copying from one file to another.
+Command: time ./tr2b abcd trav < foo.txt > bufoutput.txt
+
+real	 0m0.004s
+user	 0m0.001s
+sys	 0m0.001s
+
+I then ran the time command on the program that	deals with unbuffered I/O while
+copying	from one file to another.
+Command: time ./tr2u abcd trav < foo.txt > unbufoutput.txt
+
+real	 0m10.700s
+user	 0m1.340s
+sys	 0m9.314s
+
+Thus, the program that deals with unbuffered I/O takes far more time than the
+program that deals with buffered I/O.
+
+I then ran the time command on the program that deals with buffered I/O while
+copying from one file to the terminal.
+Command: time ./tr2b abcd trav < foo.txt
+
+real	 0m0.002s
+user	 0m0.000s
+sys	 0m0.001s
+
+Thus, we see that it takes longer to copy from one file to another than to
+copy from one file to the terminal.
+
+I then ran the time command on the program that deals with unbuffered I/O while
+copying from one file to the terminal.
+Command: time ./tr2u abcd trav < foo.txt
+
+real	 0m15.903s
+user	 0m1.344s
+sys	 0m7.987s
+
+Thus, we see that it takes longer to copy from one file to the terminal than
+it does to copy from one file to another when dealing with unbuffered I/O.
+
+Homework:
+
+Performance comparison of sfrob, sfrobu, and sfrobs:
+
+First I created files of different sizes using the following command:
+dd if=/dev/urandom of=large.txt bs=5 count=1
+
+I created 4 files: small.txt, medium.txt, large.txt, largest.txt
+The sizes were 5 bytes, 50 bytes, 500 bytes, and 5000 bytes respectively.
+
+I then ran the time command on the file small.txt:
+
+sfrob
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.002s
+
+sfrobu
+
+real	0m0.003s
+user	0m0.001s
+sys	0m0.000s
+
+sfrobs
+
+real	0m0.008s
+user	0m0.003s
+sys	0m0.005s
+
+sfrobs -f
+
+real	0m0.006s
+user	0m0.003s
+sys	0m0.005s
+
+sfrobu -f
+
+real	0m0.002s
+user	0m0.001s
+sys	0m0.001s
+
+I then ran the time command on the file medium.txt:
+
+sfrob
+
+real	0m0.003s
+user	0m0.000s
+sys	0m0.002s
+
+sfrobu
+
+real	0m0.003s
+user	0m0.000s
+sys	0m0.002s
+
+sfrobs
+
+real	0m0.009s
+user	0m0.002s
+sys	0m0.006s
+
+sfrobs -f
+
+real	0m0.006s
+user	0m0.001s
+sys	0m0.007s
+
+sfrobu -f
+
+real	0m0.003s
+user	0m0.000s
+sys	0m0.002s
+
+I then ran the time command on the file large.txt:
+
+sfrob
+
+real	0m0.009s
+user	0m0.004s
+sys	0m0.004s
+
+sfrobu
+
+real	0m0.008s
+user	0m0.003s
+sys	0m0.004s
+
+sfrobs
+
+real	0m0.010s
+user	0m0.005s
+sys	0m0.005s
+
+sfrobs -f
+
+real	0m0.008s
+user	0m0.003s
+sys	0m0.007s
+
+sfrobu -f
+
+real	0m0.009s
+user	0m0.004s
+sys	0m0.005s
+
+I then ran the time command on the file largest.txt:
+
+sfrob
+
+real	0m0.056s
+user	0m0.036s
+sys	0m0.017s
+
+sfrobu
+
+real	0m0.071s
+user	0m0.034s
+sys	0m0.034s
+
+sfrobs
+
+real	0m0.022s
+user	0m0.009s
+sys	0m0.015s
+
+sfrobs -f
+
+real	0m0.026s
+user	0m0.015s
+sys	0m0.013s
+
+sfrobu -f
+
+real	0m0.086s
+user	0m0.049s
+sys	0m0.034s
+
+From the times listed above it is clear that sfrobs is slower when dealing
+with smaller input files. However, when dealing with larger files it is the
+fastest.
+sfrob is generally faster than sfrobu as it spends less time in kernel mode.
+It has fewer system calls. Buffered I/O allows for the reading of chunks of 
+data at a time. Unbuffered is restricted to one character at a time. 
+The -f flag does not affect performance significantly when there are fewer 
+input lines. However, as the lines increase the -f flag adds more time as well.

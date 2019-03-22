@@ -1,0 +1,79 @@
+Name: Rishab Sukumar
+UID: 304902259
+TA: Zhiyi Zhang
+File: lab4.txt
+
+The first thing I did was get the coreutils tar file by using the wget command.
+Command: wget https://web.cs.ucla.edu/classes/fall18/cs35L/assign/coreutils-with-bug.tar.gz
+
+I then had to unzip the tar file using the tar command.
+Command: tar -xvzf coreutils-with-bug.tar.gz
+
+I then moved to the coreutils-with-bug directory using the cd command.
+Command: cd coreutils-with-bug
+
+I then ran ./configure followed by the make command to build this old version
+of coreutils as-is.
+
+I received the error: conflicting data types for 'futimens'
+int futimens (int, char const *, struct timespec const[2]);
+    ^
+Two functions were given the same name. Thus, to solve the problem the patch file renames the relevant functions.
+
+I then got the patch file using the curl command.
+Command: curl https://web.cs.ucla.edu/classes/fall18/cs35L/assign/coreutils.diff > coreutils.diff
+
+I then applied the patch using the patch command.
+Command: patch -p0 < coreutils.diff
+
+I then rebuilt the modified files with the command make.
+
+To reproduce the bug run the following commands:
+tmp=$(mktemp -d)
+cd $tmp
+touch -d '1918-11-11 11:00 GMT' wwi-armistice
+touch now
+sleep 1
+touch now1
+TZ=UTC0 ~/CS35L/assignment4/coreutils-with-bug/src/ls -lt --full-time wwi-armistice now now1
+
+This gave the output,
+-rw-r--r-- 1 rishab csugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 rishab csugrad 0 2018-11-03 05:53:51.188960211 +0000 now1
+-rw-r--r-- 1 rishab csugrad 0 2018-11-03 05:53:42.588723637 +0000 now
+
+The oldest file was the first to be listed which is not the functionality we want.
+
+I then stepped through the ls executable file within the src directory using gdb.
+Command: gdb ~/CS35L/assignment4/coreutils-with-bug/src/ls
+
+I then entered the command info functions to see the functions in the file.
+I set a breakpoint at main using break main.
+
+I then ran the file using run -lt wwi-armistice now now1.
+
+I stepped through the code using the s command until I reached the compare_mtime function.
+
+I examined the value of the diff variable using the info locals command.
+I did the same for each call to the cmp_mtime function.
+
+The Unix time of wwi-armistice is -1613865600. The Unix time now is around 1541230955. Thus, when we
+subtract the large negative number from the large positive number we get an overflow. This is what 
+causes the buggy functioning of the ls command.
+
+I noticed that the cmp_mtime function calls the function timespec_cmp. This function is within the
+timespec.h file in the coreutils-with-bug/lib directory. Thus, I moved to the coreutils-with-bug/lib directory.
+
+I entered the timespec.h file and changed the implementation of the timespec_cmp function. 
+I got rid of all subtraction statements and replaced them with a series of ifs that set the diff
+variable to a positive, negative or zero valued number based on which time is larger.
+
+I tried running the tests in my home directory on the SEASnet Linux servers.
+The output obtained was as follows:
+-rw-r--r-- 1 rishab csugrad 0 2054-12-17 09:28:16.000000000 -0800 wwi-armistice
+-rw-r--r-- 1 rishab csugrad 0 2018-11-03 02:01:19.931280000 -0700 now1
+-rw-r--r-- 1 rishab csugrad 0 2018-11-03 02:00:37.627297000 -0700 now
+
+This is due to the fact that the $tmp directory uses unsigned ints and the SEASnet
+home directory uses signed ints. Thus, the Unix time conversion is different and the
+time printed is different.

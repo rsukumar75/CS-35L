@@ -1,0 +1,131 @@
+Name: Rishab Sukumar
+Student ID: 304902259
+TA: Zhiyi Zhang
+File: lab3.txt
+
+I began the lab by logging into linux server 07.
+I moved to a new directory for this assignment using the cd command.
+
+The first thing I did was grab the Coreutils 8.29 source code compressed 
+tarball using the wget command.
+Command: wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz
+
+Next, I grabbed the compressed tarball signature using the wget command.
+Command: wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz.sig
+
+Next, I grabbed the gnu-keyring.gpg file using the wget command.
+Command: wget https://ftp.gnu.org/gnu/gnu-keyring.gpg
+
+The compressed tarball file was now in my working directory.
+I tried verifying its signature with the GNU keyring by running the 
+shell command gpg --verify --keyring ./gnu-keyring.gpg coreutils-8.29.tar.xz.sig
+On running this command a file trustdb.gpg was created in the following
+directory: /u/cs/ugrad/rishab/.gnupg/
+It is said to be a good signature from "Padraig Brady <P@draigBrady.com>"
+aka "Padraig Brady <pbrady@redhat.com>" aka "Padraig Brady <pixelbeat@gnu.org>"
+I received a warning saying that this key was not certified with a trusted
+signature and that there was no indication that the signature belonged to 
+the owner. These messages were displayed because I hadn't used my own private
+key to sign the coreutils key as trusted.
+
+I then unzipped the compressed tarball file using the following command:
+tar -xvf coreutils-8.29.tar.xz
+
+I created a temporary directory called coreutils-install using the mkdir
+command.
+Command: mkdir coreutils-install
+
+I then moved to the coreutils-8.29 directory using the cd command.
+Command: cd coreutils-8.29
+
+Once inside the directory I read the the INSTALL file using emacs INSTALL.
+
+I ran ./configure --prefix=/u/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-install
+
+The prefix ensures that coreutils is installed in the directory of my choosing.
+This configured the Makefile.
+
+I then ran the following commands:
+make
+make install
+
+This installed coreutils in the directory /u/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-install
+
+I then moved to the coreutils-install/bin directory using the cd command.
+
+I entered the ls command to see all the files within the directory.
+
+I then ran the command ./ls -a -A and observed the issue.
+The -A option is always overrided by the -a option.
+
+I then copied the text from the patch file obtained through the assignment page.
+I pasted this text into a new file called patchfile.diff within the 
+coreutils-8.29 directory.
+
+I then applied the patch from within the coreutils-8.29 directory using
+the command patch -p1 < patchfile.diff
+This runs the patch after stripping the text before the first slash in all the
+filenames in the patch file.
+Thus, a/src/ls.c becomes src/ls.c
+
+After applying the patch I run the make command within the same directory.
+This builds the fixed version.
+make  all-recursive
+Recursively run through all the directories within the current directory and
+recompile files that have been modified by the patch.
+
+make[1]: Entering directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29'
+Making all in po
+make[2]: Entering directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29/po'
+make[2]: Nothing to be done for `all'.
+make[2]: Leaving directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29/po'
+No files in the po directory need to be recompiled. Thus, this step is not
+necessary.
+
+Making all in .
+make[2]: Entering directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29'
+  CC       src/ls.o
+  CCLD     src/dir
+  CCLD     src/ls
+  CCLD     src/vdir
+  GEN      man/dir.1
+  GEN      man/ls.1
+  GEN      man/vdir.1
+make[2]: Leaving directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29'
+The above files were modified by the patch. Thus, they are recompiled.
+
+Making all in gnulib-tests
+make[2]: Entering directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29/gnulib-tests'
+make  all-recursive
+make[3]: Entering directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29/gnulib-tests'
+Making all in .
+make[4]: Entering directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29/gnulib-tests'
+make[4]: Nothing to be done for `all-am'.
+make[4]: Leaving directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29/gnulib-tests'
+make[3]: Leaving directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29/gnulib-tests'
+make[2]: Leaving directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29/gnulib-tests'
+No files in gnulib-tests need to be recompiled. Thus, this step is not 
+necessary
+
+make[1]: Leaving directory `/w/home.20/cs/ugrad/rishab/CS35L/assignment3/
+coreutils-8.29'
+
+I then cd into the src directory and run the command ./ls -a -A
+It does not display hidden dot files any more.
+I cd into the directory coreutils-install/bin and run the command ./ls -a -A
+It still displays hidden dot files.
+Thus, the patch fixes the bug.
+

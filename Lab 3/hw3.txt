@@ -1,0 +1,36 @@
+Name: Rishab Sukumar
+UID: 304902259
+TA: Zhiyi Zhang
+File: hw3.txt
+
+Q1. The patch simply removes an if statement and replaces it with a single
+assignment statement. The performance might improve by a very small factor
+due to this.
+The functionality is improved as the -a option doesn't override the -A
+option any longer.
+
+Q2. If my company adopts this patched version of Coreutils, we would have to
+look out for any code that is dependant on the buggy behavior of the ls
+command. If this was true it would cause issues when applied with code
+that requires the -a option to override the -A option.
+
+Q3. The /dev/null file is an empty file. Since the python file randline.py 
+attempts to read from the file and display a randomly chosen line, it fails
+on /dev/null. When attempting to choose a random line it throws the error:
+File "/usr/lib64/python2.7/random.py", line 274, in choice
+return seq[int(self.random() * len(seq))] # raises IndexError if seq is empty.
+IndexError: list index out of range.
+
+Q4. When you run randline.py with python3 instead of python you get the 
+following error:
+File "randline.py", line 65
+except IOError as (errno, strerror):
+       	          ^
+SyntaxError: invalid syntax
+Python3 deprecated automatic tuple unpacking, and since the errors passed
+were a tuple, the syntax error was reported. Python used to iterate over
+the parameters passed to the exception and thus used a tuple.
+Python3 does not do that.
+A fix for the issue would be to have the following statement instead:
+except IOError as e:
+       errno, strerror = e.args
